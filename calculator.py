@@ -42,31 +42,22 @@ def perform_calc(num1, num2, choice):
     
 
 # Asking to repeat the function
-def ask_repeat():
-    while True:
-        repeat = input("\nEnter 'yes' to repeat or 'no' to quit : ")
-        if repeat.lower()=="yes":
-            print("\n")
-            return True 
-        elif repeat.lower()=="no":
-            return False
-        else:
-            print("Invalid Input!\nTry again\n")
-            
-
-# Specifying what to repeat
-def specify_repeat():
-    print("1 → Change operation with same number\n2→ Change the number and operation both")
+def next_action():
+    print("\nWhat do you want to do next?")
+    print("1 → Change operation")
+    print("2 → Change numbers")
+    print("3 → Exit")
     while True:
         try : 
-            specify = int(input("Enter 1 or 2: "))
+            repeat = int(input("\nEnter your choice: "))
         except ValueError:
-            print("Enter either 1 or 2!\n")
+            print("Try entering either of 1/2/3: ")
             continue
-        if specify == 1:
-            return True
-        elif specify == 2:
-            return False
+        
+        if repeat in [1,2,3]:
+            return repeat
+        else:
+            print("Enter a valid choice!!\n")
 
 
 # Running the main loop
@@ -79,12 +70,13 @@ while True:
         operation = get_operation()
         result = perform_calc(num1, num2, operation)
         print(result)
-        if not ask_repeat():
+        
+        choice = next_action()
+        if choice==3:
             exit_program = True
             break
-        else: 
-            if not specify_repeat():
-                break
+        elif choice==2:
+            break
     if exit_program:
         break
         
