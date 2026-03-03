@@ -67,3 +67,5 @@ This project focuses on loop control, conditional logic, user input validation, 
 
 ## Vision
 This repository will evolve from a structured learning space into a well-organized portfolio showcasing consistent growth, clean coding practices, and strong programming fundamentals.
+
+Test line for learning branching.
