@@ -65,6 +65,39 @@ This project focuses on loop control, conditional logic, user input validation, 
 
 ---
 
+### Rock, Paper, Scissor Game (CLI Version)
+
+An interactive command-line game where the player randomly chooses between rock, paper or scissor and play with a computer bot which also generates a random choice.
+
+**Features:**
+- Use of 'random' module to generate a random computer choice to make the game fair
+- Adjustable number range based on difficulty
+- Input validation and error handling
+- Detailed output generation for each attempt.
+- Replay option after game completion
+- Structured modular design using functions
+
+This project focuses on loop control, conditional logic, user input validation, and structured program flow while maintaining beginner-friendly implementation.
+
+---
+
+### Smart To-Do Manager (CLI Version)
+
+An interactive command-line to-do manager where the user can make a list of his tasks and keep a track or record of his tasks.
+
+**Features:**
+- Add tasks with title, priority, and due date  
+- View all tasks  
+- Update existing tasks  
+- Mark tasks as completed (removes them)  
+- Delete tasks  
+- Search tasks by ID  
+- Persistent storage using a text file  
+
+This project focuses on core beginner concepts of python, while implementing File Handelling and structured program flow, maintaining beginner-friendly implementation.
+
+---
+
 ## Vision
 This repository will evolve from a structured learning space into a well-organized portfolio showcasing consistent growth, clean coding practices, and strong programming fundamentals.
 
