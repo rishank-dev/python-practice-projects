@@ -1,316 +1,272 @@
 # Smart To-Do Manager
 
 
-
 # ========== PROJECT START ===========
+import json
+from tabulate import tabulate
+import time
 
-# (1.) Check or make the file to store tasks
-try:
-    f = open("task_manager.txt", "r")
-
-except FileNotFoundError as e:
-    f = open("task_manager.txt", "w")
-
-finally:
-    f.close()
+print(" " * 20 + "SMART TO-DO MANAGER")
 
 
 
-# •••••••••••••••••••••••••••••••••••••••••
+# Fetch file details
+def load_data():
+    try:
+        with open("task_sample.txt", "r") as file:
+            data = file.read().strip()
+            if not data:
+                return []
+            return json.loads(data)
+    except (FileNotFoundError or json.JSONDecodeError):
+        return []
 
 
 
-# (2.) Display user with options to choose to execute a task
-print(f"{" "*20} SMART TO-DO MANAGER")
-
-# → Menu Options
+# Menu Options
 def display_menu():
     print(f"\n{'-' * 15} Menu {'-' * 15} \n")
-    print("1 → Add Task \n2 → View All Tasks \n3 → Update Task \n4 → Complete Task \n5 → Delete Task \n6 → Search Task \n")
+    print(" (1.)  Add new task")
+    print(" (2.)  View All tasks")
+    print(" (3.)  Update a task")
+    print(" (4.)  Mark a task as complete")
+    print(" (5.)  Delete a task")
+    print(" (6.)  Search for a task")
+    print(" (7.)  Exit \n")
     print("-" *40)
 
 
-# → User Choose Task
+
+
+# User Choose Task
 def menu_choose_task():
     while True:
-        try :
-            choice = int(input("\nEnter your choice according to the task you want to perform (1 - 7) : "))
-            if choice in [1,2,3,4,5,6]:
-                return choice
-            else:
-                print("Try entering a Valid Choice! ")
-                
-        except :
+        choice = input("\nEnter your choice from (1 - 7) : ")
+        if choice in ['1','2','3','4','5','6','7']:
+            return choice
+        else:
             print("Try entering a Valid Choice! ")
 
 
 
-# •••••••••••••••••••••••••••••••••••••••••
+
+# File save helper function
+def save_file_helper(tasks_list):
+    with open("task_sample.txt", "w") as file:
+        json.dump(tasks_list, file)
 
 
 
-# (3.) Logic to carry the task entered by the user
 
-# → Add Task
-def add_task():
+# Add Task
+def add_task(tasks_list):
     print("\nAdding a task..... \n ")
-    title = input("Enter the 'Title' of the task : ").title()
-    
     while True:
-        p = input("Choose Priority of the task.(L → low, M → medium, H → high) : ").upper()
-        if p not in ["L", "M", "H"]:
-            print("Enter from (L / M / H) \n")
-        else :
-            if p=='L':
-                priority = 'Low'
-            elif p=='M':
-                priority = 'Medium'
-            elif p=='H':
-                priority = 'High'
+        title = input("Enter 'Title' of the task : ").title().strip()
+        if title == '':
+            print("Title should have some valid characters! \n")
+        else:
             break
             
-    due_date = input("Enter the due date : ")
     
     while True:
-        try : 
-            task_id = int(input("Enter a numeric task id : "))
+        priority = input("Choose Priority of the task.(Low/ Medium/High)  : ").upper().strip()
+        if priority in ["LOW", "MEDIUM", "HIGH"]:
             break
-        except :
-            print("Enter a valid numeric ID \n")
-        
-    task = [str(task_id), title, priority, due_date]
+        else:
+            print("Try entering valid priority. \n")
+            
+    due_date = input("Enter the due date : ").strip()
     
-    with open("task_manager.txt", "a") as f:
-        f.write(str(task) + "\n")
+    task = {'Title' : title, 'Priority' : priority, 'Due Date' : due_date, 'Status' : 'Pending'}
+    tasks_list.append(task)
+    
+    save_file_helper(tasks_list)
     
     print("\nTask added successfully!!! \n")
     
 
 
 
-# → View All Tasks
-def view_all_tasks():
-    print("\n YOUR TASKS \n")
-    with open("task_manager.txt", "r") as f:
-        content = f.read()
+
+
+# View All Tasks
+def view_all_tasks(tasks_list):
+    print("\n YOUR TASKS :- \n")
+    
+    if not tasks_list:
+        print("No task added yet.\n")
+        return
         
-    list_content = content[:-1].split('\n')
-    for i in list_content:
-        values = i[2:-2].split("\', \'")
-        print(f"Task ID : {values[0]}")
-        print(f"Task Title : {values[1]}")
-        print(f"Task Priority : {values[2]}")
-        print(f"Task Due-Date : {values[3]} \n")
+    print('*' * 40)
+    print(tabulate(tasks_list, headers="keys", tablefmt = "simple", colglobalalign='center', showindex=range(1, len(tasks_list)+1)))
+    print('*' * 40)
 
 
 
 
-# → Update Task
-def update_task():
-    while True:
-        try : 
-            id = int(input("\nEnter the Task ID to update the task : "))
-            break
-        except :
-            print("Try entering a valid numeric Task ID \n")
-            
-    with open("task_manager.txt", "r") as f:
-        content = f.read()
+# Update Task
+def update_task(tasks_list):
+    if not tasks_list:
+        print("No task added yet.\n")
+        return
         
-    list_content = content[:-1].split('\n')
-    for index,i in enumerate(list_content):
-        values = i[2:-2].split("\', \'")
-        if values[0] == str(id):
-            list_content.pop(index)
-            with open("task_manager.txt","w") as f:
-                f.write("\n".join(list_content) + "\n")
-            
+    try:
+        task_index = int(input("\nEnter the Task number to update the task : "))
+    except ValueError:
+        print("Task number should be a valid number")
+        return
+    
+    for index, task in enumerate(tasks_list):
+        if task_index == index+1:
             print("\nUpdating the task....")
             
-            title = input("Update  the 'Title' of the task : ").title()
+            while True:
+                new_title = input("Enter 'Title' of the task : ").title().strip()
+                if new_title == '':
+                    print("Title should have some valid characters! \n")
+                else:
+                    break
     
             while True:
-                p = input("Update Priority of the task.(L → low, M → medium, H → high) : ").upper()
-                if p not in ["L", "M", "H"]:
-                    print("Enter from (L / M / H) \n")
-                else :
-                    if p=='L':
-                        priority = 'Low'
-                    elif p=='M':
-                        priority = 'Medium'
-                    elif p=='H':
-                        priority = 'High'
+                new_priority = input("Update Priority of the task.(Low/ Medium/ High)  : ").upper().strip()
+                if new_priority in ["LOW", "MEDIUM", "HIGH"]:
                     break
+                else:
+                    print("Try entering valid priority. \n")
                     
-            due_date = input("Update the due date : ")
-            task_id = id
+            new_due_date = input("Update the due date : ").strip()
             
-            task = [str(task_id), title, priority, due_date]
+            task['Title'] = new_title
+            task['Priority'] = new_priority
+            task['Due Date'] = new_due_date
             
-            with open("task_manager.txt", "a") as f:
-                f.write(str(task) + "\n")
+            save_file_helper(tasks_list)
             
-            print("\nTask updated successfully!!! \n")
+            print(f"\nTask Number {task_index} updated successfully!!! \n")
             break
             
     else:
-        print("Task ID not found")
+        print(f"Task number {task_index} not found.")
 
 
 
-# → Complete Task
-def complete_task():
-    print("\nThe task completed will be permenantly removed from you To-Do List \n")
-    while True:
-        try : 
-            id = int(input("Enter the Task ID of the task completed : "))
-            break
-        except :
-            print("Try entering a valid numeric Task ID \n")
-            
-    with open("task_manager.txt", "r") as f:
-        content = f.read()
+
+
+# Complete Task
+def complete_task(tasks_list):
+    if not tasks_list:
+        print("No task added yet.\n")
+        return
         
-    list_content = content[:-1].split('\n')
-    for index,i in enumerate(list_content):
-        values = i[2:-2].split("\', \'")
-        if values[0] == str(id):
-            removed = list_content.pop(index)[2:-2].split("\', \'")
-            with open("task_manager.txt","w") as f:
-                f.write("\n".join(list_content) + "\n")
-                
-            print("\nFollowing task is Completed and removed from To-Do List :-")
-            print(f"Task ID : {removed[0]}")
-            print(f"Task Title : {removed[1]}")
-            print(f"Task Priority : {removed[2]}")
-            print(f"Task Due-Date : {removed[3]} \n")
+    try:
+        task_index = int(input("\nEnter task number to mark as complete : "))
+    except ValueError:
+        print("Task number should be a valid number")
+        return
+    
+    for index, task in enumerate(tasks_list):
+        if task_index == index + 1:
+            task['Status'] = 'Completed'
+            save_file_helper(tasks_list)
+            print(f"Task '{task['Title']}' is marked complete.")
             break
-    else:
-        print("Task ID not found !! ")
-
-
-
-# → Delete task
-def delete_task():
-    print("\nThe task deleted will be permenantly removed from you To-Do List \n")
-    while True:
-        try : 
-            id = int(input("Enter the Task ID of the task you want to delete : "))
-            break
-        except :
-            print("Try entering a valid numeric Task ID \n")
             
-    with open("task_manager.txt", "r") as f:
-        content = f.read()
+    else:
+        print(f"Task number {task_index} not found.")
         
-    list_content = content[:-1].split('\n')
-    for index,i in enumerate(list_content):
-        values = i[2:-2].split("\', \'")
-        if values[0] == str(id):
-            removed = list_content.pop(index)[2:-2].split("\', \'")
-            with open("task_manager.txt","w") as f:
-                f.write("\n".join(list_content) + "\n")
-                
-            print("\nFollowing task is deleted from To-Do List :-")
-            print(f"Task ID : {removed[0]}")
-            print(f"Task Title : {removed[1]}")
-            print(f"Task Priority : {removed[2]}")
-            print(f"Task Due-Date : {removed[3]} \n")
-            break
-    else:
-        print("Task ID not found !! ")
-    
 
 
-# → Search task or view task
-def search_task():
-    print("\nSearching the task..... \n")
-    while True:
-        try : 
-            id = int(input("Enter the Task ID of that task : "))
-            break
-        except :
-            print("Try entering a valid numeric Task ID \n")
-            
-    with open("task_manager.txt", "r") as f:
-        content = f.read()
+
+
+# Delete task
+def delete_task(tasks_list):
+    if not tasks_list:
+        print("No task added yet.\n")
+        return
         
-    list_content = content[:-1].split('\n')
-    for index,i in enumerate(list_content):
-        values = i[2:-2].split("\', \'")
-        if values[0] == str(id):
-            find = list_content[index][2:-2].split("\', \'")
-            print("\nHere are the details of the task : :-")
-            print(f"Task ID : {find[0]}")
-            print(f"Task Title : {find[1]}")
-            print(f"Task Priority : {find[2]}")
-            print(f"Task Due-Date : {find[3]} \n")
+    print("\nThe task deleted will be permanently removed from your To-Do List. \n")
+    
+    try:
+        task_index = int(input("\nEnter task number to delete : "))
+    except ValueError:
+        print("Task number should be a valid number")
+        return
+    
+    for index, task in enumerate(tasks_list):
+        if task_index == index + 1:
+            removed = tasks_list.pop(index)
+            
+            save_file_helper(tasks_list)
+            print(f"Task '{removed['Title']}' is deleted from your To-Do List")
             break
     else:
-        print("Task ID not found !! ")
+        print(f"Task number {task_index} not found.")
 
 
 
 
-# •••••••••••••••••••••••••••••••••••••••••
-
-
-
-# (4.) Executing the task entered by the user
-def execute():
-    user_choice = menu_choose_task()
+# Search task or view task
+def search_task(tasks_list):
+    if not tasks_list:
+        print("No task added yet.\n")
+        return
+        
+    try:
+        task_index = int(input("\nEnter task number to search : "))
+    except ValueError:
+        print("Task number should be a valid number")
+        return
     
-    if user_choice == 1:
-        add_task()
-    elif user_choice == 2:
-        view_all_tasks()
-    elif user_choice == 3:
-        update_task()
-    elif user_choice == 4:
-        complete_task()
-    elif user_choice == 5:
-        delete_task()
-    elif user_choice == 6:
-        search_task()
-    
+    for index, task in enumerate(tasks_list):
+        if task_index == index + 1:
+            print(f"Searching for task number {task_index} ......")
+            print(f"\n Task Number : {task_index} \n")
+            print('*' * 40)
+            print(tabulate([task], headers="keys", tablefmt = "simple", colglobalalign='center', showindex=[index+1]))
+            print('*' * 40)
+            break
+    else:
+        print(f"Task number {task_index} not found.")
 
 
 
 
-# •••••••••••••••••••••••••••••••••••••••••
-
-
-
-# (5.) Repeat the task by going to menu or exit
-def menu_exit():
-    while True:
-        repeat = input("\nEnter 'm' to return to menu and 'q' to quit : ")
-        if repeat == 'm':
-            return True
-        elif repeat == 'q':
-            return False
-        else:
-            print("Try entering a valid choice (m/q) : ")
-            
-
-
-
-
-# •••••••••••••••••••••••••••••••••••••••••
-
-
-
-# (6.) Running the main loop
+# Executing the task entered by the user
 def main():
     while True:
+        tasks_list = load_data()
         display_menu()
-        execute()
-        if not menu_exit():
-            print("\nExiting the app...... \nGood Bye")
-            break
+        user_choice = menu_choose_task()
+        
+        match user_choice:
+            case '1':
+                add_task(tasks_list)
+                time.sleep(2)
+            case '2':
+                view_all_tasks(tasks_list)
+                time.sleep(2)
+            case '3':
+                update_task(tasks_list)
+                time.sleep(2)
+            case '4':
+                complete_task(tasks_list)
+                time.sleep(2)
+            case '5':
+                delete_task(tasks_list)
+                time.sleep(2)
+            case '6':
+                search_task(tasks_list)
+                time.sleep(2)
+            case '7':
+                print("Exiting the program.....")
+                break
+    
 
-main()
 
+# Running for main file 
+if __name__ == '__main__':
+    main()
 
 
 
