@@ -1,18 +1,21 @@
-# Smart To-Do Manager (v1.0)
+# Smart To-Do Manager (v2.0)
 
 ## Overview
-Smart To-Do Manager is a command-line based task management application built using Python. It allows users to manage daily tasks with features like adding, viewing, updating, deleting, and searching tasks. The application uses file handling to store tasks so that data persists between runs.
+Smart To-Do Manager is a command-line based task management application built using Python. This version improves upon the initial release by introducing structured data storage, better task tracking, and an improved user interface.
+
+Tasks are stored using JSON format, making the system more reliable and scalable compared to plain text storage.
 
 ---
 
 ## Features
 - Add tasks with title, priority, and due date  
-- View all tasks  
+- View all tasks in a structured table format  
 - Update existing tasks  
-- Mark tasks as completed (removes them)  
-- Delete tasks  
-- Search tasks by ID  
-- Persistent storage using a text file  
+- Mark tasks as completed (tracked using status)  
+- Delete tasks permanently  
+- Search tasks by task number  
+- Persistent storage using JSON  
+- Improved CLI display using tabular format  
 
 ---
 
@@ -21,7 +24,7 @@ Smart To-Do Manager is a command-line based task management application built us
 Smart-To-Do-Manager/
 │
 ├── to_do_manager.py
-├── task_manager.txt
+├── task_sample.txt
 ├── tasks_sample.txt
 └── README.md
 ```
@@ -30,23 +33,40 @@ Smart-To-Do-Manager/
 
 ## How to Run
 1. Make sure Python is installed  
-2. Download or clone this repository  
-3. Run the following command:
+2. Install required dependency:
+
+```
+pip install tabulate
+```
+
+3. Run the program:
 
 ```
 python to_do_manager.py
 ```
 
-4. Follow the menu instructions in the terminal  
+4. Follow the menu options in the terminal  
 
 ---
 
 ## Technologies Used
-- Python (core concepts)
-- File handling
-- Command Line Interface (CLI)
+- Python  
+- JSON (for data storage)  
+- Tabulate library (for table display)  
+- Command Line Interface (CLI)  
+
+---
+
+## Improvements from v1.0
+- Switched from plain text storage to JSON format  
+- Added task status (Pending / Completed)  
+- Improved input validation  
+- Better user interface using table format  
+- Cleaner and more structured code  
 
 ---
 
 ## Notes
-This is the initial version (v1.0) of the project built to practice Python fundamentals and basic application structure. Future versions will include improvements in data storage, task tracking, and user interface.
+This version focuses on improving reliability, usability, and structure. It represents a transition from a basic beginner project to a more structured intermediate-level application.
+
+Future versions may include advanced features such as filtering, sorting, and graphical user interface (GUI).
