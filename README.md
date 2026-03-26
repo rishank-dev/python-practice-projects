@@ -98,6 +98,23 @@ This project focuses on core beginner concepts of python, while implementing Fil
 
 ---
 
+### Smart Notes Manager (CLI Version)
+
+An interactive command-line notes manager where the user can create, store, and manage personal notes efficiently.
+
+**Features:**
+- Add notes with title and description  
+- View all notes in a structured format  
+- Edit existing notes  
+- Delete notes permanently  
+- Search notes by keyword or note number  
+- Automatic date and time tracking  
+- Persistent storage using a file (JSON format)  
+
+This project focuses on core beginner concepts of Python, including file handling, data structures, and modular program design, while maintaining a simple and beginner-friendly implementation.
+
+---
+
 ## Vision
 This repository will evolve from a structured learning space into a well-organized portfolio showcasing consistent growth, clean coding practices, and strong programming fundamentals.
 
