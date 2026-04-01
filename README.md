@@ -115,6 +115,23 @@ This project focuses on core beginner concepts of Python, including file handlin
 
 ---
 
+### Monthly Expense Tracker (CLI Version)
+
+An interactive command-line expense tracker where the user can record, manage, and analyze daily expenses with a focus on monthly reporting.
+
+**Features:**
+- Add expenses with amount, category, and description  
+- View all expenses in a structured table format  
+- Delete expenses permanently  
+- Generate monthly expense reports  
+- View category-wise expense summary  
+- Automatic date and time tracking  
+- Persistent storage using a file (JSON format)  
+
+This project focuses on core beginner concepts of Python, including file handling, data structures, and modular program design, while maintaining a simple and beginner-friendly implementation.
+
+---
+
 ## Vision
 This repository will evolve from a structured learning space into a well-organized portfolio showcasing consistent growth, clean coding practices, and strong programming fundamentals.
 
